@@ -1,0 +1,176 @@
+================================================================================
+Simple assignments
+================================================================================
+
+account1 assets:bank:checking
+currency $
+description %2 %3
+amount %4 USD
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference))))
+
+================================================================================
+Numbered and in/out fields
+================================================================================
+
+account2 expenses:food
+amount1 %amount
+amount2-out %debit
+amount-in %credit
+balance1 %balance
+comment2 posting comment
+currency3 EUR
+date2 %5
+status *
+code %id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference))))
+
+================================================================================
+Field and match group references
+================================================================================
+
+comment note: %somefield - %anotherfield, date: %1
+comment2 date:\1-01
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (field_reference)
+      (field_reference)
+      (field_reference)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value
+      (match_group_reference))))
+
+================================================================================
+Literal percent and backslash
+================================================================================
+
+comment 100% sure \ ok %
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value)))
+
+================================================================================
+Colon and tab separators
+================================================================================
+
+account1: assets:checking
+account2	expenses:food
+account3 : equity:opening
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (field_assignment
+    name: (hledger_field)
+    value: (value)))
+
+================================================================================
+Field with no value
+================================================================================
+
+comment
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)))
+
+================================================================================
+End at the top level
+================================================================================
+
+end
+end 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field))
+  (field_assignment
+    name: (hledger_field)
+    value: (value)))
+
+================================================================================
+Last line without a newline
+================================================================================
+account1 assets:checking
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value)))

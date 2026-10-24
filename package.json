@@ -1,0 +1,18 @@
+{
+  "name": "tree-sitter-hledger",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammars for hledger journal and CSV rules files",
+  "type": "module",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obsidian33/tree-sitter-hledger.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "obsidian33"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.27.1"
+  }
+}

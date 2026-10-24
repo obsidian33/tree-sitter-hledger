@@ -1,0 +1,179 @@
+================================================================================
+All directives
+================================================================================
+
+source ./Checking1*.csv
+archive
+encoding iso-8859-1
+separator ;
+decimal-mark ,
+date-format %-d/%-m/%Y %l:%M %p
+timezone -0500
+newest-first
+intra-day-reversed
+skip 1
+balance-type ==*
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    path: (path))
+  (directive
+    name: (directive_name))
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name)
+    value: (date_format
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)))
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name))
+  (directive
+    name: (directive_name))
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name)
+    value: (directive_value)))
+
+================================================================================
+Colon separators and skip without a count
+================================================================================
+
+skip: 2
+separator: TAB
+skip
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (directive
+    name: (directive_name)))
+
+================================================================================
+Date formats
+================================================================================
+
+date-format %Y-%h-%d
+date-format %m/%d/%y
+date-format %-m/%-d/%Y %l:%M %p some other junk
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    value: (date_format
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)))
+  (directive
+    name: (directive_name)
+    value: (date_format
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)))
+  (directive
+    name: (directive_name)
+    value: (date_format
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text))))
+
+================================================================================
+Source with a comment
+================================================================================
+
+source History_for_Account*.csv   # | grep -E '^x'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    path: (path)
+    value: (comment)))
+
+================================================================================
+Source with a data cleaning command
+================================================================================
+
+source ./paypal.json | paypalcsv
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    path: (path)
+    command: (command)))
+
+================================================================================
+Source with a data generating command
+================================================================================
+
+source | simplefincsv data/simplefin.json 'chase.*card'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    command: (command)))
+
+================================================================================
+Include
+================================================================================
+
+include categorisation.rules
+include common/banks.rules
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (include
+    path: (path))
+  (include
+    path: (path)))

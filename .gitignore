@@ -1,0 +1,12 @@
+# Node artifacts
+node_modules/
+
+# Build artifacts
+build/
+*.so
+*.dylib
+*.dll
+*.wasm
+
+# hledger binary and example files downloaded by `just fetch-hledger`
+.hledger/

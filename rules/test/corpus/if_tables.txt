@@ -1,0 +1,110 @@
+================================================================================
+Comma table
+================================================================================
+
+if,account2,comment
+atm transaction fee,expenses:business:banking,deductible? check it
+%description groceries,expenses:groceries,
+;; Comment line that describes why this particular date is special
+2023/01/12.*Plumbing LLC,expenses:house:upkeep,emergency plumbing call-out
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_table
+    field: (hledger_field)
+    field: (hledger_field)
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value)
+      (value))
+    (table_row
+      (matcher
+        field: (field_reference)
+        pattern: (pattern))
+      (value))
+    (comment)
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value)
+      (value))))
+
+================================================================================
+Pipe table with combined matchers and references
+================================================================================
+
+if|account2|comment
+%description amazon && %amount ^-|expenses:refunds|refund of %amount
+%date (....)-..-..|expenses:misc|year \1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_table
+    field: (hledger_field)
+    field: (hledger_field)
+    (table_row
+      (matcher
+        field: (field_reference)
+        pattern: (pattern))
+      (matcher
+        prefix: (matcher_prefix)
+        field: (field_reference)
+        pattern: (pattern))
+      (value)
+      (value
+        (field_reference)))
+    (table_row
+      (matcher
+        field: (field_reference)
+        pattern: (pattern))
+      (value)
+      (value
+        (match_group_reference)))))
+
+================================================================================
+Table ended by an empty line
+================================================================================
+
+if;account2
+coffee;expenses:coffee
+
+account1 assets:checking
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_table
+    field: (hledger_field)
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value)))
+  (field_assignment
+    name: (hledger_field)
+    value: (value)))
+
+================================================================================
+Table with skip and end fields
+================================================================================
+
+if,skip,end
+^Date,1,
+^Total,,1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_table
+    field: (hledger_field)
+    field: (hledger_field)
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value))
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value))))

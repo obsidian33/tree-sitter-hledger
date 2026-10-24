@@ -1,0 +1,32 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "hledger_rules",
+      "camelcase": "HledgerRules",
+      "title": "hledger CSV rules",
+      "scope": "source.hledger.rules",
+      "path": "rules",
+      "file-types": ["rules"],
+      "highlights": "rules/queries/highlights.scm",
+      "injections": "rules/queries/injections.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Tree-sitter grammars for hledger journal and CSV rules files",
+    "authors": [{ "name": "obsidian33" }],
+    "links": { "repository": "https://github.com/obsidian33/tree-sitter-hledger" }
+  },
+  "bindings": {
+    "c": false,
+    "go": false,
+    "java": false,
+    "node": false,
+    "python": false,
+    "rust": false,
+    "swift": false,
+    "zig": false
+  }
+}

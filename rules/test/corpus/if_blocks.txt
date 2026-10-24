@@ -1,0 +1,281 @@
+================================================================================
+Matcher on the if line
+================================================================================
+
+if groceries
+ account2 expenses:groceries
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Matchers on the following lines
+================================================================================
+
+if
+monthly service fee
+atm transaction fee
+banking thru software
+ account2 expenses:business:banking
+ comment  XXX deductible ? check it
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (matcher
+      pattern: (pattern))
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Trailing spaces after if
+================================================================================
+
+if   
+WHOLE FOODS
+  account2 expenses:food
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Field matchers
+================================================================================
+
+if %description amazon
+%3 whole foods
+%"csv date" ^2024
+  account2 expenses:shopping
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      field: (field_reference)
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Combined and negated matchers
+================================================================================
+
+if %description amazon && %date 2025-01-01 && ! %amount ^-
+& %amount 10
+&& coffee
+& ! refund
+&& ! %description gift
+! whole foods
+!%description whole foods
+  account2 expenses:shopping
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      field: (field_reference)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      pattern: (pattern))
+    (matcher
+      prefix: (matcher_prefix)
+      field: (field_reference)
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Match groups
+================================================================================
+
+if %date (....-..)-..
+  comment2 date:\1-01
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      field: (field_reference)
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value
+        (match_group_reference)))))
+
+================================================================================
+Skip and end
+================================================================================
+
+if ^Date,
+  skip
+if ,,,,
+  end
+if pending
+  skip 2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)))
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)))
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Whitespace-only lines between rules
+================================================================================
+
+if groceries
+  account2 expenses:groceries
+  
+  comment shopping
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Comment-like line among matchers
+================================================================================
+
+if
+whole foods
+; this line is a pattern, not a comment
+  account2 expenses:groceries
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Indented comment after an empty line
+================================================================================
+
+if groceries
+  account2 expenses:groceries
+
+  ; an indented comment is fine after the block ends
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value)))
+  (comment))
+
+================================================================================
+Comment between if blocks
+================================================================================
+
+if groceries
+  account2 expenses:groceries
+; a column-0 comment ends the block
+if coffee
+  account2 expenses:coffee
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value)))
+  (comment)
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))

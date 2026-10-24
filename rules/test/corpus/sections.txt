@@ -1,0 +1,156 @@
+================================================================================
+Nested sections
+================================================================================
+
+account1 assets:checking
+* Food
+if groceries
+  account2 expenses:groceries
+** Dining
+if restaurant
+  account2 expenses:dining
+*** Coffee
+if coffee
+  account2 expenses:coffee
+* Transport
+if uber
+  account2 expenses:transport
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (if_block
+      (matcher
+        pattern: (pattern))
+      (field_assignment
+        name: (hledger_field)
+        value: (value)))
+    (section
+      (heading
+        marker: (heading_marker)
+        title: (heading_title))
+      (if_block
+        (matcher
+          pattern: (pattern))
+        (field_assignment
+          name: (hledger_field)
+          value: (value)))
+      (section
+        (heading
+          marker: (heading_marker)
+          title: (heading_title))
+        (if_block
+          (matcher
+            pattern: (pattern))
+          (field_assignment
+            name: (hledger_field)
+            value: (value))))))
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (if_block
+      (matcher
+        pattern: (pattern))
+      (field_assignment
+        name: (hledger_field)
+        value: (value)))))
+
+================================================================================
+Deeper heading without a parent
+================================================================================
+
+** Orphan
+account1 assets:checking
+* Top
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (field_assignment
+      name: (hledger_field)
+      value: (value)))
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))))
+
+================================================================================
+Heading without a title
+================================================================================
+
+* 
+account1 assets:checking
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section
+    (heading
+      marker: (heading_marker))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
+
+================================================================================
+Section after an if table
+================================================================================
+
+* Categories
+if,account2
+coffee,expenses:coffee
+
+** Subcategory
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (if_table
+      field: (hledger_field)
+      (table_row
+        (matcher
+          pattern: (pattern))
+        (value)))
+    (section
+      (heading
+        marker: (heading_marker)
+        title: (heading_title)))))
+
+================================================================================
+Star line directly after if table rows is a table comment
+================================================================================
+
+if,account2
+coffee,expenses:coffee
+** not a heading: hledger reads this as a comment in the table
+tea,expenses:tea
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_table
+    field: (hledger_field)
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value))
+    (comment)
+    (table_row
+      (matcher
+        pattern: (pattern))
+      (value))))
