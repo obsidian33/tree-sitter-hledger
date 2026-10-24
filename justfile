@@ -1,3 +1,6 @@
+# -e: a loop over the grammars fails when any grammar fails, not just the last
+set shell := ["bash", "-euc"]
+
 grammars := "journal rules"
 
 # List recipes

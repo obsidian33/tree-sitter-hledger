@@ -55,7 +55,7 @@ def hledger_accepts(hledger, grammar, text):
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
         # hledger reads included files while parsing, so they must exist
-        for match in re.finditer(r"^!?include ([^;\n]+)", text, re.M):
+        for match in re.finditer(r"^!?include[ \t]+([^;\n]+)", text, re.M):
             target = match.group(1).strip()
             if ":" in target:  # a format prefix like timedot:
                 target = target.split(":", 1)[1]
