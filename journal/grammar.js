@@ -130,7 +130,7 @@ export default grammar({
       ]),
     ),
 
-    heading_title: (_) => /[^\n]+/,
+    heading_title: (_) => /[^\r\n]+/,
 
     // Comment lines
 
@@ -141,9 +141,9 @@ export default grammar({
     comment: (_) =>
       token(
         choice(
-          /[;#][^\n]*/,
-          re`\*+([^${WS}\n*][^\n]*)?`,
-          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[${WS}][^\\n]*`),
+          /[;#][^\r\n]*/,
+          re`\*+([^${WS}\r\n*][^\r\n]*)?`,
+          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[${WS}][^\\r\\n]*`),
         ),
       ),
 
@@ -151,7 +151,7 @@ export default grammar({
     // an indented `;` line continues the previous comment, and other indented
     // lines are postings or subdirectives.
     _indented_comment_line: ($) =>
-      seq($._ws, alias(/[;#*][^\n]*/, $.comment), $._eol),
+      seq($._ws, alias(/[;#*][^\r\n]*/, $.comment), $._eol),
 
     // Transactions
 
@@ -177,7 +177,7 @@ export default grammar({
         ),
       ),
 
-    period_expression: (_) => re`[^${WS}\n;]+([${WS}][^${WS}\n;]+)*`,
+    period_expression: (_) => re`[^${WS}\r\n;]+([${WS}][^${WS}\r\n;]+)*`,
 
     // `= QUERY` followed by postings whose amounts may be `*` multipliers
     auto_posting_rule: ($) =>
@@ -197,7 +197,7 @@ export default grammar({
         ),
       ),
 
-    query: (_) => re`[^${WS};\n][^;\n]*`,
+    query: (_) => re`[^${WS};\r\n][^;\r\n]*`,
 
     // Status, code, description and comment, each optional
     _header: ($) =>
@@ -231,7 +231,7 @@ export default grammar({
 
     status: (_) => choice('*', '!'),
 
-    code: (_) => /\([^)\n]*\)/,
+    code: (_) => /\([^)\r\n]*\)/,
 
     // `PAYEE | NOTE`, or a description without a payee/note split
     description: ($) =>
@@ -245,9 +245,9 @@ export default grammar({
         ),
       ),
 
-    _description_text: (_) => re`[^${WS};|\n*!(][^;|\n]*`,
+    _description_text: (_) => re`[^${WS};|\r\n*!(][^;|\r\n]*`,
 
-    note: (_) => re`[^${WS};\n][^;\n]*`,
+    note: (_) => re`[^${WS};\r\n][^;\r\n]*`,
 
     // Postings
 
@@ -263,7 +263,7 @@ export default grammar({
     // Single-spaced text: any one whitespace character counts as a single
     // space, as in hledger, so `account<TAB>$1` is all account name. Can't start with a status mark or
     // `;`, which starts a comment line.
-    account: (_) => re`[^${WS}\n;*!][^${WS}\n]*([${WS}][^${WS}\n]+)*`,
+    account: (_) => re`[^${WS}\r\n;*!][^${WS}\r\n]*([${WS}][^${WS}\r\n]+)*`,
 
     // Amounts
 
@@ -288,9 +288,9 @@ export default grammar({
     lot_date: ($) =>
       seq(alias(spaced('['), '['), optional($._ws), $.date, alias(spaced(']'), ']')),
 
-    lot_note: (_) => spaced(/\([^)\n]*\)/),
+    lot_note: (_) => spaced(/\([^)\r\n]*\)/),
 
-    valuation_expression: (_) => spaced(/\(\([^)\n]*\)\)/),
+    valuation_expression: (_) => spaced(/\(\([^)\r\n]*\)\)/),
 
     balance_assertion: ($) =>
       seq(
@@ -322,7 +322,7 @@ export default grammar({
 
     // A quoted symbol, or any run of characters other than digits, spaces and
     // -+.@*;"{}=
-    commodity: (_) => token(choice(/"[^";\n]*"/, /[^0-9\-+.@*;\t\n "{}=]+/)),
+    commodity: (_) => token(choice(/"[^";\r\n]*"/, /[^0-9\-+.@*;\t\r\n "{}=]+/)),
 
     sign: (_) => choice('-', '+'),
 
@@ -354,9 +354,9 @@ export default grammar({
         ),
       ),
 
-    tag_value: (_) => re`[^${WS},\n][^,\n]*`,
+    tag_value: (_) => re`[^${WS},\r\n][^,\r\n]*`,
 
-    _comment_word: (_) => re`[^${WS}\n:]+`,
+    _comment_word: (_) => re`[^${WS}\r\n:]+`,
 
     // Ledger-style posting dates: [DATE], [DATE=DATE2] or [=DATE2]
     posting_date: (_) =>
@@ -420,7 +420,7 @@ export default grammar({
       ),
 
     // A path or glob, optionally with a format prefix like timedot:
-    path: (_) => re`[^${WS};\n]([^;\n]*[^${WS};\n])?`,
+    path: (_) => re`[^${WS};\r\n]([^;\r\n]*[^${WS};\r\n])?`,
 
     alias_directive: ($) =>
       seq(
@@ -432,27 +432,27 @@ export default grammar({
             optional($._ws),
             '=',
             optional($._ws),
-            optional(field('replacement', alias(re`[^${WS}\n]([^\n]*[^${WS}\n])?`, $.account))),
+            optional(field('replacement', alias(re`[^${WS}\r\n]([^\r\n]*[^${WS}\r\n])?`, $.account))),
           ),
           seq(
-            field('old', alias(re`[^${WS}=\n/]([^=\n]*[^${WS}=\n])?`, $.account)),
+            field('old', alias(re`[^${WS}=\r\n/]([^=\r\n]*[^${WS}=\r\n])?`, $.account)),
             optional($._ws),
             '=',
             optional($._ws),
-            optional(field('new', alias(re`[^${WS}\n]([^\n]*[^${WS}\n])?`, $.account))),
+            optional(field('new', alias(re`[^${WS}\r\n]([^\r\n]*[^${WS}\r\n])?`, $.account))),
           ),
         ),
         $._eol,
       ),
 
-    regex: (_) => /\/([^/\\\n]|\\.)+\//,
+    regex: (_) => /\/([^/\\\r\n]|\\[^\r\n])+\//,
 
     account_directive: ($) =>
       prec.right(
         seq(
           'account',
           $._ws,
-          field('account', alias(re`[^${WS}\n;(\[][^${WS}\n]*([${WS}][^${WS}\n]+)*`, $.account)),
+          field('account', alias(re`[^${WS}\r\n;(\[][^${WS}\r\n]*([${WS}][^${WS}\r\n]+)*`, $.account)),
           optional(field('comment', $.comment_text)),
           $._eol,
           repeat(choice($._following_comment, $._subdirective)),
@@ -462,7 +462,7 @@ export default grammar({
     // hledger ignores indented lines under account, commodity, payee and tag
     // directives, except a commodity's format line.
     _subdirective: ($) =>
-      seq($._ws, alias(re`[^${WS};\n][^\n]*`, $.subdirective), $._eol),
+      seq($._ws, alias(re`[^${WS};\r\n][^\r\n]*`, $.subdirective), $._eol),
 
     apply_account_directive: ($) =>
       seq(
@@ -538,7 +538,7 @@ export default grammar({
         seq(
           'payee',
           $._ws,
-          field('payee', alias(choice(/"[^"\n]*"/, re`[^${WS};\n"]([^;\n]*[^${WS};\n])?`), $.payee)),
+          field('payee', alias(choice(/"[^"\r\n]*"/, re`[^${WS};\r\n"]([^;\r\n]*[^${WS};\r\n])?`), $.payee)),
           optional(field('comment', $.comment_text)),
           $._eol,
           repeat(choice($._following_comment, $._subdirective)),
@@ -550,7 +550,7 @@ export default grammar({
         seq(
           'tag',
           $._ws,
-          field('name', alias(re`[^${WS}\n]+`, $.tag_name)),
+          field('name', alias(re`[^${WS}\r\n]+`, $.tag_name)),
           optional(field('comment', $.comment_text)),
           $._eol,
           repeat(choice($._following_comment, $._subdirective)),
@@ -615,7 +615,7 @@ export default grammar({
     // Text hledger ignores at the end of some directives. Lower precedence so
     // it doesn't swallow what could be parsed, like the commodity in
     // `P 2024-01-01 AAPL 179 USD`.
-    _rest_of_line: (_) => token(prec(-1, /[^\n]+/)),
+    _rest_of_line: (_) => token(prec(-1, /[^\r\n]+/)),
 
     // Lines
 

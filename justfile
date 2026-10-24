@@ -31,5 +31,9 @@ validate: fetch-hledger
 examples: fetch-hledger generate
     for g in {{ grammars }}; do scripts/parse-examples.sh $g; done
 
+# Check that CRLF line endings give the same parse trees as LF
+crlf: fetch-hledger generate
+    for g in {{ grammars }}; do scripts/check-crlf.sh $g; done
+
 # Everything CI should run
-check: test validate examples
+check: test validate examples crlf

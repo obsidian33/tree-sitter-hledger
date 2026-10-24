@@ -119,7 +119,7 @@ export default grammar({
       ]),
     ),
 
-    heading_title: (_) => /[^\n]+/,
+    heading_title: (_) => /[^\r\n]+/,
 
     // Comments
 
@@ -130,27 +130,27 @@ export default grammar({
     comment: (_) =>
       token(
         choice(
-          /[;#][^\n]*/,
-          re`\*+([^${WS}\n*][^\n]*)?`,
-          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[${WS}][^\\n]*`),
+          /[;#][^\r\n]*/,
+          re`\*+([^${WS}\r\n*][^\r\n]*)?`,
+          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[${WS}][^\\r\\n]*`),
         ),
       ),
 
     _indented_comment_line: ($) =>
-      seq(alias(token(re`[${WS}]+[;#*][^\n]*`), $.comment), $._eol),
+      seq(alias(token(re`[${WS}]+[;#*][^\r\n]*`), $.comment), $._eol),
 
     // Inside an if table every line starting with ;, # or * is a comment, so a
     // star heading there doesn't start a section. Preferred over a table row
     // that would match the same text.
     _table_comment_line: ($) =>
-      seq(alias(token(prec(1, re`[${WS}]*[;#*][^\n]*`)), $.comment), $._eol),
+      seq(alias(token(prec(1, re`[${WS}]*[;#*][^\r\n]*`)), $.comment), $._eol),
 
     // include
 
     // hledger inlines included files before parsing, matching lines that start
     // with "include " (a space, not a tab).
     include: ($) =>
-      seq('include', re` [${WS}]*`, field('path', alias(/[^\n]+/, $.path)), $._eol),
+      seq('include', re` [${WS}]*`, field('path', alias(/[^\r\n]+/, $.path)), $._eol),
 
     // Directives
 
@@ -162,27 +162,27 @@ export default grammar({
         ...DIRECTIVES.map((name) => directive($, name, $.directive_value)),
       ),
 
-    directive_value: (_) => /[^\n]+/,
+    directive_value: (_) => /[^\r\n]+/,
 
     // A # before the | comments out the rest of the line; after the | it
     // belongs to the shell command.
     _source_value: ($) =>
       choice(
         seq(
-          field('path', alias(/[^#|\n]+/, $.path)),
+          field('path', alias(/[^#|\r\n]+/, $.path)),
           optional(choice($._source_comment, $._source_command)),
         ),
         $._source_comment,
         $._source_command,
       ),
 
-    _source_comment: ($) => alias(/#[^\n]*/, $.comment),
+    _source_comment: ($) => alias(/#[^\r\n]*/, $.comment),
 
     _source_command: ($) =>
-      seq('|', optional(field('command', alias(/[^\n]+/, $.command)))),
+      seq('|', optional(field('command', alias(/[^\r\n]+/, $.command)))),
 
     date_format: ($) =>
-      repeat1(choice($.format_specifier, alias(/[^%\n]+/, $.text), alias('%', $.text))),
+      repeat1(choice($.format_specifier, alias(/[^%\r\n]+/, $.text), alias('%', $.text))),
 
     // strftime-style conversions, eg %d, %-m, %Y, %Ez
     format_specifier: (_) => /%[-_0^#]?[0-9]*[EO]?[a-zA-Z%]/,
@@ -202,7 +202,7 @@ export default grammar({
       ),
 
     field_name: (_) =>
-      token(choice(/"[^"\n:;#~]+"/, /[^ \t\n,;#~"][^ \t\n,;#~]*/)),
+      token(choice(/"[^"\r\n:;#~]+"/, /[^ \t\r\n,;#~"][^ \t\r\n,;#~]*/)),
 
     // Field assignments
 
@@ -233,7 +233,7 @@ export default grammar({
     // start one is literal.
     _value_text: (_) =>
       token(
-        choice(/([^%\\\n]|%[^\p{L}\p{N}_\-\n]|\\[^0-9\n])+/, '%', '\\'),
+        choice(/([^%\\\r\n]|%[^\p{L}\p{N}_\-\r\n]|\\[^0-9\r\n])+/, '%', '\\'),
       ),
 
     // if blocks
@@ -275,11 +275,11 @@ export default grammar({
     // narrower references allowed in values.
     _matcher_field: ($) =>
       alias(
-        token(/%("[^"\n:;#~]+"|[^ \t\n,;#~"][^ \t\n,;#~]*)/),
+        token(/%("[^"\r\n:;#~]+"|[^ \t\r\n,;#~"][^ \t\r\n,;#~]*)/),
         $.field_reference,
       ),
 
-    pattern: (_) => token(seq(re`[^${WS}\n&!%]`, /([^&\n]|&[^&\n])*/)),
+    pattern: (_) => token(seq(re`[^${WS}\r\n&!%]`, /([^&\r\n]|&[^&\r\n])*/)),
 
     _rule_line: ($) =>
       seq($._ws, alias($._conditional_rule, $.field_assignment), $._eol),
@@ -424,7 +424,7 @@ function ifTableRules(sep, name) {
               field(
                 'field',
                 alias(
-                  token(new RegExp(`%("[^"\\n:;#~${s}]+"|[^ \\t\\n,;#~"${s}][^ \\t\\n,;#~${s}]*)`)),
+                  token(new RegExp(`%("[^"\\r\\n:;#~${s}]+"|[^ \\t\\r\\n,;#~"${s}][^ \\t\\r\\n,;#~${s}]*)`)),
                   $.field_reference,
                 ),
               ),
@@ -434,7 +434,7 @@ function ifTableRules(sep, name) {
           field(
             'pattern',
             alias(
-              token(seq(new RegExp(`[^${WS}\\n&!%${s}]`), new RegExp(`([^&\\n${s}]|&[^&\\n${s}])*`))),
+              token(seq(new RegExp(`[^${WS}\\r\\n&!%${s}]`), new RegExp(`([^&\\r\\n${s}]|&[^&\\r\\n${s}])*`))),
               $.pattern,
             ),
           ),
@@ -449,7 +449,7 @@ function ifTableRules(sep, name) {
             $.match_group_reference,
             token(
               choice(
-                new RegExp(`([^%\\\\\\n${s}]|%[^\\p{L}\\p{N}_\\-\\n${s}]|\\\\[^0-9\\n${s}])+`),
+                new RegExp(`([^%\\\\\\r\\n${s}]|%[^\\p{L}\\p{N}_\\-\\r\\n${s}]|\\\\[^0-9\\r\\n${s}])+`),
                 '%',
                 '\\',
               ),

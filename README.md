@@ -15,6 +15,8 @@ tested against it:
 - every journal and rules file shipped with hledger (138 journals and 76 rules
   files, examples and test fixtures) must parse cleanly exactly when hledger
   accepts it
+- each of those files must parse to the same tree with CRLF line endings, so
+  no node's text includes a carriage return
 
 Star comment lines (`* Food`, `** Groceries`) are parsed as nested outline
 sections in both grammars, so they can be folded and navigated.
@@ -163,9 +165,10 @@ Requires [tree-sitter CLI](https://tree-sitter.github.io/tree-sitter/creating-pa
 | `just update-tests` | Record the current parse trees as the tests' expected output |
 | `just validate` | Check every corpus input against hledger |
 | `just examples` | Parse every journal and rules file shipped with hledger and compare with hledger's verdict |
+| `just crlf` | Check that those files parse the same with CRLF line endings |
 | `just check` | All of the above |
 
-`just fetch-hledger` (run automatically by `validate` and `examples`) downloads
+`just fetch-hledger` (run automatically by `validate`, `examples` and `crlf`) downloads
 the pinned hledger release and its example files into `.hledger/`.
 
 ## License
