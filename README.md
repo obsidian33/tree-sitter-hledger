@@ -69,6 +69,10 @@ Parses the whole rules format: directives, `fields` lists, field assignments
 `&` / `!` combinations, `if` tables, `include`, and the `source` directive's data
 command.
 
+As in hledger, Unicode spaces (such as no-break spaces) count as whitespace,
+except in field names, which end only at a space or tab. Unlike hledger, a
+carriage return counts only as part of a line ending, in both grammars.
+
 Some mistakes show up as parse errors, as they would in hledger:
 
 - an indented comment directly after an `if` block (hledger reads every

@@ -468,7 +468,7 @@
                   },
                   {
                     "type": "PATTERN",
-                    "value": "[ \\t]+"
+                    "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
                   }
                 ]
               }
@@ -662,7 +662,7 @@
                   },
                   {
                     "type": "PATTERN",
-                    "value": "[ \\t]+"
+                    "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
                   }
                 ]
               }
@@ -838,7 +838,7 @@
                   },
                   {
                     "type": "PATTERN",
-                    "value": "[ \\t]+"
+                    "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
                   }
                 ]
               }
@@ -996,7 +996,7 @@
                   },
                   {
                     "type": "PATTERN",
-                    "value": "[ \\t]+"
+                    "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
                   }
                 ]
               }
@@ -1136,7 +1136,7 @@
                   },
                   {
                     "type": "PATTERN",
-                    "value": "[ \\t]+"
+                    "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
                   }
                 ]
               }
@@ -1258,7 +1258,7 @@
                   },
                   {
                     "type": "PATTERN",
-                    "value": "[ \\t]+"
+                    "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
                   }
                 ]
               }
@@ -1317,11 +1317,11 @@
           },
           {
             "type": "PATTERN",
-            "value": "\\*+([^ \\t\\n*][^\\n]*)?"
+            "value": "\\*+([^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n*][^\\n]*)?"
           },
           {
             "type": "PATTERN",
-            "value": "\\*\\*\\*\\*\\*\\*\\*\\**[ \\t][^\\n]*"
+            "value": "\\*\\*\\*\\*\\*\\*\\*\\**[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000][^\\n]*"
           }
         ]
       }
@@ -1335,7 +1335,7 @@
             "type": "TOKEN",
             "content": {
               "type": "PATTERN",
-              "value": "[ \\t]+[;#*][^\\n]*"
+              "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+[;#*][^\\n]*"
             }
           },
           "named": true,
@@ -1359,7 +1359,7 @@
               "value": 1,
               "content": {
                 "type": "PATTERN",
-                "value": "[ \\t]*[;#*][^\\n]*"
+                "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]*[;#*][^\\n]*"
               }
             }
           },
@@ -1381,7 +1381,7 @@
         },
         {
           "type": "PATTERN",
-          "value": " [ \\t]*"
+          "value": " [ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]*"
         },
         {
           "type": "FIELD",
@@ -2188,7 +2188,7 @@
             "members": [
               {
                 "type": "PATTERN",
-                "value": "[ \\t]*,[ \\t]*"
+                "value": "[ \\t]*,[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]*"
               },
               {
                 "type": "CHOICE",
@@ -2304,7 +2304,7 @@
         },
         {
           "type": "PATTERN",
-          "value": "[ \\t]*:[ \\t]*"
+          "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]*:[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]*"
         }
       ]
     },
@@ -2619,7 +2619,7 @@
         "members": [
           {
             "type": "PATTERN",
-            "value": "[^ \\t\\n&!%]"
+            "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%]"
           },
           {
             "type": "PATTERN",
@@ -2957,7 +2957,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%,]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%,]"
                   },
                   {
                     "type": "PATTERN",
@@ -3267,7 +3267,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%\\|]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%\\|]"
                   },
                   {
                     "type": "PATTERN",
@@ -3577,7 +3577,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%;]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%;]"
                   },
                   {
                     "type": "PATTERN",
@@ -3887,7 +3887,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%:]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%:]"
                   },
                   {
                     "type": "PATTERN",
@@ -4197,7 +4197,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%\\/]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%\\/]"
                   },
                   {
                     "type": "PATTERN",
@@ -4507,7 +4507,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%~]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%~]"
                   },
                   {
                     "type": "PATTERN",
@@ -4817,7 +4817,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%\\^]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%\\^]"
                   },
                   {
                     "type": "PATTERN",
@@ -5127,7 +5127,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%\\+]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%\\+]"
                   },
                   {
                     "type": "PATTERN",
@@ -5437,7 +5437,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%=]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%=]"
                   },
                   {
                     "type": "PATTERN",
@@ -5747,7 +5747,7 @@
                 "members": [
                   {
                     "type": "PATTERN",
-                    "value": "[^ \\t\\n&!%@]"
+                    "value": "[^ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000\\n&!%@]"
                   },
                   {
                     "type": "PATTERN",
@@ -5800,14 +5800,14 @@
     },
     "_ws": {
       "type": "PATTERN",
-      "value": "[ \\t]+"
+      "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+"
     },
     "_whitespace_line": {
       "type": "CHOICE",
       "members": [
         {
           "type": "PATTERN",
-          "value": "[ \\t]+\\r?\\n"
+          "value": "[ \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]+\\r?\\n"
         },
         {
           "type": "SEQ",

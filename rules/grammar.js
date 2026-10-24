@@ -54,6 +54,20 @@ const DIRECTIVES = [
 
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
 
+// hledger's rules parser treats any Unicode space as whitespace (Haskell's
+// isSpace): space, tab, form feed, vertical tab and the Unicode space
+// separators. Field names are the exception: they end only at a space or tab.
+// Written as regex escapes for use inside character classes.
+const WS = ' \\t\\f\\v\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000';
+
+/**
+ * A regex from a template literal, with backslashes kept as written.
+ *
+ * @param {TemplateStringsArray} strings
+ * @param {...string} values
+ */
+const re = (strings, ...values) => new RegExp(String.raw(strings, ...values));
+
 export default grammar({
   name: 'hledger_rules',
 
@@ -96,7 +110,7 @@ export default grammar({
             seq(
               field(
                 'marker',
-                alias(token(seq('*'.repeat(level), /[ \t]+/)), $.heading_marker),
+                alias(token(seq('*'.repeat(level), re`[${WS}]+`)), $.heading_marker),
               ),
               optional(field('title', $.heading_title)),
               $._eol,
@@ -117,26 +131,26 @@ export default grammar({
       token(
         choice(
           /[;#][^\n]*/,
-          /\*+([^ \t\n*][^\n]*)?/,
-          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[ \\t][^\\n]*`),
+          re`\*+([^${WS}\n*][^\n]*)?`,
+          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[${WS}][^\\n]*`),
         ),
       ),
 
     _indented_comment_line: ($) =>
-      seq(alias(token(/[ \t]+[;#*][^\n]*/), $.comment), $._eol),
+      seq(alias(token(re`[${WS}]+[;#*][^\n]*`), $.comment), $._eol),
 
     // Inside an if table every line starting with ;, # or * is a comment, so a
     // star heading there doesn't start a section. Preferred over a table row
     // that would match the same text.
     _table_comment_line: ($) =>
-      seq(alias(token(prec(1, /[ \t]*[;#*][^\n]*/)), $.comment), $._eol),
+      seq(alias(token(prec(1, re`[${WS}]*[;#*][^\n]*`)), $.comment), $._eol),
 
     // include
 
     // hledger inlines included files before parsing, matching lines that start
     // with "include " (a space, not a tab).
     include: ($) =>
-      seq('include', / [ \t]*/, field('path', alias(/[^\n]+/, $.path)), $._eol),
+      seq('include', re` [${WS}]*`, field('path', alias(/[^\n]+/, $.path)), $._eol),
 
     // Directives
 
@@ -181,7 +195,9 @@ export default grammar({
         optional(':'),
         $._ws,
         optional($.field_name),
-        repeat1(seq(/[ \t]*,[ \t]*/, optional($.field_name))),
+        // A space or tab before the comma; a Unicode space there would be part of
+        // the field name
+        repeat1(seq(re`[ \t]*,[${WS}]*`, optional($.field_name))),
         $._eol,
       ),
 
@@ -202,7 +218,7 @@ export default grammar({
     _assignment_value: ($) =>
       seq($._assignment_separator, optional(field('value', $.value))),
 
-    _assignment_separator: ($) => choice($._ws, /[ \t]*:[ \t]*/),
+    _assignment_separator: ($) => choice($._ws, re`[${WS}]*:[${WS}]*`),
 
     hledger_field: (_) => HLEDGER_FIELD,
 
@@ -263,7 +279,7 @@ export default grammar({
         $.field_reference,
       ),
 
-    pattern: (_) => token(seq(/[^ \t\n&!%]/, /([^&\n]|&[^&\n])*/)),
+    pattern: (_) => token(seq(re`[^${WS}\n&!%]`, /([^&\n]|&[^&\n])*/)),
 
     _rule_line: ($) =>
       seq($._ws, alias($._conditional_rule, $.field_assignment), $._eol),
@@ -287,9 +303,9 @@ export default grammar({
 
     // Lines
 
-    _ws: (_) => /[ \t]+/,
+    _ws: (_) => re`[${WS}]+`,
 
-    _whitespace_line: ($) => choice(/[ \t]+\r?\n/, seq($._ws, $._eof)),
+    _whitespace_line: ($) => choice(re`[${WS}]+\r?\n`, seq($._ws, $._eof)),
 
     _newline: (_) => /\r?\n/,
 
@@ -418,7 +434,7 @@ function ifTableRules(sep, name) {
           field(
             'pattern',
             alias(
-              token(seq(new RegExp(`[^ \\t\\n&!%${s}]`), new RegExp(`([^&\\n${s}]|&[^&\\n${s}])*`))),
+              token(seq(new RegExp(`[^${WS}\\n&!%${s}]`), new RegExp(`([^&\\n${s}]|&[^&\\n${s}])*`))),
               $.pattern,
             ),
           ),

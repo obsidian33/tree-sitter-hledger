@@ -58,3 +58,40 @@ account2 expenses:food  ; part of the account name
   (field_assignment
     name: (hledger_field)
     value: (value)))
+
+================================================================================
+Unicode whitespace
+================================================================================
+
+skip 1
+fields date, description, amount
+account1 assets:checking
+　; indented with an ideographic space
+if WHOLE FOODS
+ account2 expenses:groceries
+ 
+comment form feed indentation
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (directive
+    name: (directive_name)
+    value: (directive_value))
+  (fields_list
+    (field_name)
+    (field_name)
+    (field_name))
+  (field_assignment
+    name: (hledger_field)
+    value: (value))
+  (comment)
+  (if_block
+    (matcher
+      pattern: (pattern))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))
+    (field_assignment
+      name: (hledger_field)
+      value: (value))))
