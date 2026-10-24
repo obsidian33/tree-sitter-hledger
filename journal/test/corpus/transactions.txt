@@ -1,0 +1,652 @@
+================================================================================
+Basic transaction
+================================================================================
+
+2024-01-01 opening balances
+    assets:checking   $1000
+    equity:start
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Date separators
+================================================================================
+
+2024.01.01 dots
+    a  1
+    b
+2024/1/1 slashes no leading zeros
+    a  1
+    b
+2024-1-5 dashes no leading zeros
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Year-less dates and default year directives
+================================================================================
+
+Y2024
+1/31 yearless after Y without space
+    a  1
+    b
+Y 2025
+2/1 yearless after Y with space
+    a  1
+    b
+year 2026
+3/1 yearless after year
+    a  1
+    b
+apply year 2027
+4/1 yearless after apply year
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (default_year_directive
+    year: (year))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (default_year_directive
+    year: (year))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (default_year_directive
+    year: (year))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (default_year_directive
+    year: (year))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Secondary dates
+================================================================================
+
+2024-01-01=01-05 secondary date without year
+    a  1
+    b
+2024/01/01=2024/01/07 secondary date with year
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    secondary_date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    secondary_date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Status and code
+================================================================================
+
+2024-01-03 ! (12345) pay rent
+    a  1
+    b
+2024-01-04 * cleared
+    a  1
+    b
+2024-01-05 (abc-1) code only
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    status: (status)
+    code: (code)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    status: (status)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    code: (code)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Payee and note
+================================================================================
+
+2024-01-02 Gringott's Bank | withdrawal  ; a comment
+    a  1
+    b
+2024-01-03 | note only
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description
+      payee: (payee)
+      note: (note))
+    comment: (comment_text)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    description: (description
+      note: (note))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Transaction comments and tags
+================================================================================
+
+2025-01-01 groceries        ; tag1:value 1, tag2:value 2, comment text
+    ; a second line of transaction comment
+    ; tag3: value 3
+    expenses:food       $1
+    assets:checking
+2025-01-02 bare tag  ; some-tag:
+    a  1
+    b
+2025-01-03 ; comment with no description
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    comment: (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value))
+      (tag
+        name: (tag_name)
+        value: (tag_value)))
+    (comment_text)
+    (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    description: (description)
+    comment: (comment_text
+      (tag
+        name: (tag_name)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    comment: (comment_text)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Posting status
+================================================================================
+
+2024-01-01 posting status marks
+    * assets:cash    $-1
+    ! expenses:food   $1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      status: (status)
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      status: (status)
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))))
+
+================================================================================
+Posting dates
+================================================================================
+
+2015/5/30
+    expenses:food     $10  ; food purchased on saturday 5/30
+    assets:checking        ; bank cleared it on monday, date:6/1
+2015/5/31
+    expenses:food     $10
+    assets:checking        ; [2015/6/2]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number))
+      comment: (comment_text))
+    (posting
+      account: (account)
+      comment: (comment_text
+        (tag
+          name: (tag_name)
+          value: (tag_value)))))
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      comment: (comment_text
+        (posting_date)))))
+
+================================================================================
+Virtual postings
+================================================================================
+
+2022-01-01 virtual postings
+    assets:cash          $-10
+    expenses:food          $10
+    (budget:food)          $-10
+    [assets:checking:budget:food]  $-10
+    [assets:checking:available]     $10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))))
+
+================================================================================
+Account names with spaces and punctuation
+================================================================================
+
+2024-01-01 account names with spaces and punctuation
+    liabilities:credit card   $-500
+    assets:bank:wells fargo:checking  $250
+    expenses:food & drink (misc)  $250
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))))
+
+================================================================================
+Transactions without postings
+================================================================================
+
+2024-02-01 note some event
+    ; Postings are not required.
+
+2024-02-02 header only
+
+2024-02-03 next
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (comment_text))
+  (transaction
+    date: (date)
+    description: (description))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Comment lines among postings
+================================================================================
+
+2024-01-01 description
+  ; tag:value
+  a  1  ; c
+  ; between postings
+  b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number))
+      comment: (comment_text))
+    (comment_text)
+    (posting
+      account: (account))))
+
+================================================================================
+Blank lines around a transaction
+================================================================================
+
+
+
+2024-01-01 surrounded by blank lines
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Trailing whitespace
+================================================================================
+
+2024-01-01 trailing whitespace   
+    a   $1   
+    b   
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Tabs
+================================================================================
+
+2024-01-01	tab separated
+	a		$1
+	b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Unicode accounts and commodities
+================================================================================
+
+2024-01-01 ユニコード
+    資産:現金    ¥1000
+    支出:食費   -¥1000
+2024-01-02 cyrillic
+    активы:банк   100 руб
+    расходы
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        sign: (sign)
+        commodity: (commodity)
+        quantity: (number))))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account))))
+
+================================================================================
+Last line without a newline
+================================================================================
+2024-01-01 x
+    a  1
+    b
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))

@@ -1,0 +1,520 @@
+================================================================================
+Amount forms
+================================================================================
+
+2024-01-01 amount forms
+    a   $1
+    a   4000 AAPL
+    a   3 "green apples"
+    a   -$1
+    a   $-1
+    a   10USD
+    a   EUR 1E3
+    a   1E-6
+    a   -1E3 EUR
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account)
+      amount: (amount
+        sign: (sign)
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        sign: (sign)
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account))))
+
+================================================================================
+Spaces after signs
+================================================================================
+
+2024-01-01 sign spacing
+    a   + $1
+    a   $-      1
+    a   -  $1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        sign: (sign)
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        sign: (sign)
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Digit group marks
+================================================================================
+
+2024-01-01 digit groups
+    a     $1,000,000.00
+    a   EUR 2.000.000,00
+    a   INR 9,99,99,999.00
+    a        1 000 000.00
+    a        1 000 000.00
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Trailing decimal marks
+================================================================================
+
+2024-01-01 trailing decimal mark
+    a   1000. AAAA
+    a   $10.
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Costs
+================================================================================
+
+2024-01-15 costs
+    assets:investments     2.0 AAAA @ $1.50
+    assets:investments     3.0 AAAA @@ $4
+    assets:euros           €100 @ $1.23
+    assets:checking
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (cost
+          (cost_marker)
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (cost
+          (cost_marker)
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)
+        (cost
+          (cost_marker)
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account))))
+
+================================================================================
+Lot annotations
+================================================================================
+
+2024-01-15 lot annotations
+    assets:investments     2 AAAA {$1.50}
+    assets:investments     2 AAAA {{$3.00}}
+    assets:investments     2 AAAA {$1.50} [2024-01-15]
+    assets:investments     2 AAAA {$1.50} [2024-01-15] (lot1) @ $1.60
+    assets:checking
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (lot_cost
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (lot_cost
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (lot_cost
+          commodity: (commodity)
+          quantity: (number))
+        (lot_date
+          (date))))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (lot_cost
+          commodity: (commodity)
+          quantity: (number))
+        (lot_date
+          (date))
+        (lot_note)
+        (cost
+          (cost_marker)
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account))))
+
+================================================================================
+Balance assertions
+================================================================================
+
+2013/1/1
+    usd    $-1  == $-1
+    eur    €-1  == €-1
+    both    0   = $0
+    assets   $0 ==* $0
+    assets   $0 =* $0
+    inv     0.0 AAAA   =  0.0 AAAA @ $1.50
+    x
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number))
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          sign: (sign)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number))
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          sign: (sign)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number))
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number))
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number))
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity))
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          quantity: (number)
+          commodity: (commodity)
+          (cost
+            (cost_marker)
+            commodity: (commodity)
+            quantity: (number)))))
+    (posting
+      account: (account))))
+
+================================================================================
+Balance assignments
+================================================================================
+
+2016/1/1 opening balances
+    assets:checking            = $409.32
+    assets:cash                 = $42
+    equity:opening balances
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account)
+      assertion: (balance_assertion
+        (assertion_marker)
+        (amount
+          commodity: (commodity)
+          quantity: (number))))
+    (posting
+      account: (account))))
+
+================================================================================
+Commodity symbols with letters and symbols
+================================================================================
+
+2024-01-01 letter+symbol commodities
+    a   C$10
+    a   AU$ 10
+    a   10 h
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account))))
+
+================================================================================
+Comments after amounts
+================================================================================
+
+2024-01-01 posting comment after amount with one space
+    a   $1 ; one space before semicolon after amount
+    b      ;two spaces after empty amount
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number))
+      comment: (comment_text))
+    (posting
+      account: (account)
+      comment: (comment_text))))
+
+================================================================================
+Valuation expressions
+================================================================================
+
+2024-01-01 ledger valuation expression (ignored by hledger)
+    a   10 AAPL ((100 USD))
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)
+        (valuation_expression)))
+    (posting
+      account: (account))))
+
+================================================================================
+Amounts without a commodity
+================================================================================
+
+2024-01-01 plain numbers
+    a   10
+    a   -10.50
+    a   .5
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))

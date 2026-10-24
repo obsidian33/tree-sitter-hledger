@@ -1,0 +1,291 @@
+================================================================================
+Account directives
+================================================================================
+
+account assets:bank:checking    ; same-line comment, type:A
+  ; next-line comment
+  ; some tags - acctnum:12345
+account liabilities:credit card
+account expenses           ; type:X
+account assets:receivable
+  format subdirective  ; currently ignored
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (account_directive
+    account: (account)
+    comment: (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value)))
+    (comment_text)
+    (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value))))
+  (account_directive
+    account: (account))
+  (account_directive
+    account: (account)
+    comment: (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value))))
+  (account_directive
+    account: (account)
+    (subdirective)))
+
+================================================================================
+Commodity directives
+================================================================================
+
+commodity $1000.00
+commodity 1.000,00 EUR
+commodity 1 000 000.0000   ; the no-symbol commodity
+commodity 1000. AAAA       ; show AAAA with no decimals
+commodity 1.0000 "AAAA 2023"
+commodity INR
+  format INR 1,00,00,000.00
+  other subdirective  ; ignored
+commodity GBP
+commodity ""
+commodity £1,000.00  ; tag:value
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (commodity_directive
+    amount: (amount
+      commodity: (commodity)
+      quantity: (number)))
+  (commodity_directive
+    amount: (amount
+      quantity: (number)
+      commodity: (commodity)))
+  (commodity_directive
+    amount: (amount
+      quantity: (number))
+    comment: (comment_text))
+  (commodity_directive
+    amount: (amount
+      quantity: (number)
+      commodity: (commodity))
+    comment: (comment_text))
+  (commodity_directive
+    amount: (amount
+      quantity: (number)
+      commodity: (commodity)))
+  (commodity_directive
+    commodity: (commodity)
+    (format_subdirective
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (subdirective))
+  (commodity_directive
+    commodity: (commodity))
+  (commodity_directive
+    commodity: (commodity))
+  (commodity_directive
+    amount: (amount
+      commodity: (commodity)
+      quantity: (number))
+    comment: (comment_text
+      (tag
+        name: (tag_name)
+        value: (tag_value)))))
+
+================================================================================
+Decimal mark directive
+================================================================================
+
+decimal-mark ,
+2024-01-01 comma decimal
+    a   1.000,50 EUR
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (decimal_mark_directive
+    mark: (decimal_mark))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)
+        commodity: (commodity)))
+    (posting
+      account: (account))))
+
+================================================================================
+Payee and tag directives
+================================================================================
+
+payee Whole Foods    ; a comment
+payee ""
+tag item-id
+tag trip   ; a comment
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (payee_directive
+    payee: (payee)
+    comment: (comment_text))
+  (payee_directive
+    payee: (payee))
+  (tag_directive
+    name: (tag_name))
+  (tag_directive
+    name: (tag_name)
+    comment: (comment_text)))
+
+================================================================================
+Include directives
+================================================================================
+
+include other.journal
+include ./inc/a.journal
+include timedot:notes.md
+include inc/*.journal
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (include_directive
+    path: (path))
+  (include_directive
+    path: (path))
+  (include_directive
+    path: (path))
+  (include_directive
+    path: (path)))
+
+================================================================================
+Alias directives
+================================================================================
+
+alias checking = assets:bank:wells fargo:checking
+alias /^(.+):bank:([^:]+):(.*)/ = \1:\2 \3
+alias /\./=:
+end aliases
+2024-01-01 aliased
+    checking  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alias_directive
+    old: (account)
+    new: (account))
+  (alias_directive
+    pattern: (regex)
+    replacement: (account))
+  (alias_directive
+    pattern: (regex)
+    replacement: (account))
+  (end_directive)
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Apply account
+================================================================================
+
+apply account home
+2010/1/1
+    food    $10
+    cash
+end apply account
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (apply_account_directive
+    account: (account))
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (end_directive))
+
+================================================================================
+Default commodity
+================================================================================
+
+D $1,000.00
+2024-01-01 default commodity
+    a   100
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (default_commodity_directive
+    amount: (amount
+      commodity: (commodity)
+      quantity: (number)))
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Market prices
+================================================================================
+
+P 2024-03-01 AAPL $179
+P 2009-01-01 € $1.35
+P 2024-03-01 "AAAA 2023" 10.5 EUR
+P 2024-03-01 00:00:00 BTC $60000
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (price_directive
+    date: (date)
+    commodity: (commodity)
+    amount: (amount
+      commodity: (commodity)
+      quantity: (number)))
+  (price_directive
+    date: (date)
+    commodity: (commodity)
+    amount: (amount
+      commodity: (commodity)
+      quantity: (number)))
+  (price_directive
+    date: (date)
+    commodity: (commodity)
+    amount: (amount
+      quantity: (number)
+      commodity: (commodity)))
+  (price_directive
+    date: (date)
+    time: (time)
+    commodity: (commodity)
+    amount: (amount
+      commodity: (commodity)
+      quantity: (number))))

@@ -1,0 +1,198 @@
+================================================================================
+Periodic transactions
+================================================================================
+
+~ monthly
+    expenses:rent          $2000
+    assets:bank:checking
+
+~ monthly  set budget goals  ; with a comment
+    (expenses:rent)      $1000
+
+~ monthly from 2023-04-15 to 2023-06-16
+    expenses:utilities          $400
+    assets:bank:checking
+
+~ every 2 months  in 2023, we will review
+    assets:bank:checking   $1500
+    income:acme inc
+
+~ every 15th day of month
+    a  1
+    b
+
+~ quarterly from 2024
+    a  1
+    b
+
+~ weekly from 2024/01 to 2024/06
+    a  1
+    b
+
+~ every 2 weeks from 2024-01-01  biweekly pay
+    a  1
+    b
+
+~ yearly in 2025
+    a  1
+    b
+
+~ every 1st Monday of month
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    description: (description)
+    comment: (comment_text)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number))))
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (periodic_transaction
+    period: (period_expression)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Auto posting rules
+================================================================================
+
+= revenues:consulting
+    liabilities:tax:2024:us          *0.25  ; Add a tax liability & expense
+    expenses:tax:2024:us            *-0.25  ; for 25% of the revenue.
+
+= expenses:food
+    (liabilities:charity)   $-1
+
+= expenses:gifts
+    assets:checking:gifts  *-1
+    assets:checking         *1
+
+= desc:'whole foods' amt:>10
+    (budget:%account)   *$2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (auto_posting_rule
+    query: (query)
+    (posting
+      account: (account)
+      multiplier: (multiplier)
+      amount: (amount
+        quantity: (number))
+      comment: (comment_text))
+    (posting
+      account: (account)
+      multiplier: (multiplier)
+      amount: (amount
+        sign: (sign)
+        quantity: (number))
+      comment: (comment_text)))
+  (auto_posting_rule
+    query: (query)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number))))
+  (auto_posting_rule
+    query: (query)
+    (posting
+      account: (account)
+      multiplier: (multiplier)
+      amount: (amount
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      multiplier: (multiplier)
+      amount: (amount
+        quantity: (number))))
+  (auto_posting_rule
+    query: (query)
+    (posting
+      account: (account)
+      multiplier: (multiplier)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))))

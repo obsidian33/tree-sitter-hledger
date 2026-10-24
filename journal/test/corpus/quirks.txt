@@ -1,0 +1,197 @@
+================================================================================
+A tab inside an account name is a single space
+================================================================================
+
+2024-01-01 a tab is a single space, so 1 is part of the account name
+    a	1
+    (b)  1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))))
+
+================================================================================
+Indented hash and star lines in a transaction are postings
+================================================================================
+
+2024-01-01 only indented ; lines are comments here
+    a  1
+    # an account named like a comment
+
+2024-01-02
+    a  1
+    * a cleared posting
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    comment: (comment_text)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)))
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      status: (status)
+      account: (account))))
+
+================================================================================
+Single-spaced semicolons are part of account names
+================================================================================
+
+account a ; c
+2024-01-01
+    a ; b  1
+    c
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (account_directive
+    account: (account))
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Ledger directives hledger ignores
+================================================================================
+
+apply tag foo
+end apply tag
+apply fixed CAD $0.90
+end apply fixed
+assert true
+check x
+define x=1
+expr 1
+value v
+eval 1
+--option
+A assets:cash
+bucket assets:cash
+end apply year
+N $
+C 1.00 Kb = 1024 bytes
+python
+  import os
+
+  print(1)
+2024-01-01
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (ignored_directive)
+  (end_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive)
+  (ignored_directive
+    (commodity))
+  (ignored_directive
+    (amount
+      quantity: (number)
+      commodity: (commodity))
+    (amount
+      quantity: (number)
+      commodity: (commodity)))
+  (ignored_directive)
+  (transaction
+    date: (date)
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))
+
+================================================================================
+Ledger-style directive prefixes
+================================================================================
+
+!alias a = b
+@payee x
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alias_directive
+    old: (account)
+    new: (account))
+  (payee_directive
+    payee: (payee)))
+
+================================================================================
+Unicode whitespace
+================================================================================
+
+2024-01-01 no-break space after the date
+    a  $1
+  b　　$-1
+    c  1.5E3
+    d  1,000E2
+    e
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (transaction
+    date: (date)
+    description: (description)
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        commodity: (commodity)
+        sign: (sign)
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account)
+      amount: (amount
+        quantity: (number)))
+    (posting
+      account: (account))))

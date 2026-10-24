@@ -1,18 +1,20 @@
+grammars := "journal rules"
+
 # List recipes
 default:
     @just --list
 
-# Regenerate the rules parser from rules/grammar.js
+# Regenerate the parsers from */grammar.js
 generate:
-    cd rules && tree-sitter generate
+    for g in {{ grammars }}; do (cd $g && tree-sitter generate); done
 
-# Run the rules grammar's corpus tests
+# Run the corpus tests of both grammars
 test: generate
-    cd rules && tree-sitter test
+    for g in {{ grammars }}; do (cd $g && tree-sitter test); done
 
 # Accept the current parse trees as the expected output of the corpus tests
 update-tests: generate
-    cd rules && tree-sitter test --update
+    for g in {{ grammars }}; do (cd $g && tree-sitter test --update --show-fields); done
 
 # Download the pinned hledger binary and its example files into .hledger/
 fetch-hledger:
@@ -20,11 +22,11 @@ fetch-hledger:
 
 # Check that hledger accepts (or rejects) every corpus input the way the tests expect
 validate: fetch-hledger
-    scripts/validate-corpus.py
+    for g in {{ grammars }}; do scripts/validate-corpus.py $g; done
 
-# Parse every rules file shipped with hledger
+# Parse every journal and rules file shipped with hledger and compare with hledger's verdict
 examples: fetch-hledger generate
-    scripts/parse-examples.sh
+    for g in {{ grammars }}; do scripts/parse-examples.sh $g; done
 
 # Everything CI should run
 check: test validate examples

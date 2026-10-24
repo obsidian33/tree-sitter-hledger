@@ -1,0 +1,109 @@
+================================================================================
+Comment lines
+================================================================================
+
+# hash comment
+; semicolon comment
+* star comment (org heading)
+comment
+A multi-line comment block,
+  with an indented line
+end comment
+
+2024-01-01 after comment block
+    a  1
+    b
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (comment)
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (comment_block)
+    (transaction
+      date: (date)
+      description: (description)
+      (posting
+        account: (account)
+        amount: (amount
+          quantity: (number)))
+      (posting
+        account: (account)))))
+
+================================================================================
+Comment block without an end
+================================================================================
+
+comment
+the rest of the file
+is a comment
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment_block))
+
+================================================================================
+Nested sections
+================================================================================
+
+* Assets
+account assets:checking
+** Opening
+2024-01-01 opening
+    assets:checking  1
+    equity
+* Expenses
+account expenses:food
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (account_directive
+      account: (account))
+    (section
+      (heading
+        marker: (heading_marker)
+        title: (heading_title))
+      (transaction
+        date: (date)
+        description: (description)
+        (posting
+          account: (account)
+          amount: (amount
+            quantity: (number)))
+        (posting
+          account: (account)))))
+  (section
+    (heading
+      marker: (heading_marker)
+      title: (heading_title))
+    (account_directive
+      account: (account))))
+
+================================================================================
+Heading without a title, and star comments
+================================================================================
+
+* 
+*not a heading
+******* too deep to be a heading
+******** eight stars
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section
+    (heading
+      marker: (heading_marker))
+    (comment)
+    (comment)
+    (comment)))

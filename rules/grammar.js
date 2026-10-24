@@ -111,13 +111,14 @@ export default grammar({
 
     _comment_line: ($) => seq($.comment, $._eol),
 
-    // One to six `*` followed by whitespace is a heading instead.
+    // One to six `*` followed by whitespace is a heading instead. (Repetition
+    // is spelled out: tree-sitter's regexes don't support open-ended `{n,}`.)
     comment: (_) =>
       token(
         choice(
           /[;#][^\n]*/,
           /\*+([^ \t\n*][^\n]*)?/,
-          new RegExp(`\\*{${MAX_HEADING_LEVEL + 1},}[ \\t][^\\n]*`),
+          new RegExp(`${'\\*'.repeat(MAX_HEADING_LEVEL + 1)}\\**[ \\t][^\\n]*`),
         ),
       ),
 
