@@ -1,0 +1,35 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install the tree-sitter CLI
+        # The version that generated the committed parsers
+        run: npm install --global tree-sitter-cli@0.27.1
+      - name: Cache the pinned hledger release
+        uses: actions/cache@v4
+        with:
+          path: .hledger
+          key: hledger-${{ runner.os }}-${{ hashFiles('scripts/fetch-hledger.sh') }}
+      - run: just check
+      - name: Check that the generated parsers are committed
+        run: |
+          changes=$(git status --porcelain --untracked-files=all -- journal/src rules/src)
+          if [ -n "$changes" ]; then
+            echo "$changes"
+            echo "::error::journal/src or rules/src is out of date with grammar.js; run \`just generate\` and commit the result"
+            exit 1
+          fi
